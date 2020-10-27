@@ -37,11 +37,11 @@ class PyTest(TestCommand):
         try:
             from multiprocessing import cpu_count
 
-            self.pytest_args = ["-n", str(cpu_count()), "--boxed"]
+            self.pytest_args = ["-n", str(cpu_count()), "--boxed", "--cov=./"]
         except (ImportError, NotImplementedError):
-            self.pytest_args = ["-n", "1", "--boxed"]
+            self.pytest_args = ["-n", "1", "--boxed", "--cov=./"]
         else:
-            self.pytest_args = []
+            self.pytest_args = ["--cov=./"]
 
     def finalize_options(self):
         TestCommand.finalize_options(self)
