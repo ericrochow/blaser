@@ -15,6 +15,9 @@ commands:
   run-tests:
     steps:
       - run: tox
+  codecov:
+    steps:
+      - run: bash <(curl -s https://codecov.io/bash)
 
 jobs:
   build:
