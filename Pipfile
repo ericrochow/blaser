@@ -13,6 +13,7 @@ codecov = "*"
 pytest-cov = "*"
 pytest-mock = "*"
 tox = "*"
+coverage = "*"
 
 [packages]
 requests = "*"
