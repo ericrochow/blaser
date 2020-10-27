@@ -1,0 +1,30 @@
+version: 2.1
+
+executors:
+  blaser-executor:
+    docker:
+      - image: themattrix/tox
+    environment:
+      LOCALE: en_US.utf8
+
+commands:
+  prep-environment:
+    steps:
+      - checkout
+      - run: pip install tox
+  run-tests:
+    steps:
+      - run: tox
+
+jobs:
+  build:
+    executor: blaser-executor
+    working_directory: "~/blaser"
+    steps:
+      - prep-environment
+      - run-tests
+
+workflows:
+  commit:
+    jobs:
+      - build

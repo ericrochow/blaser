@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-import logging
+# import logging
 
 # from typing import Dict, List, Optional
 from typing import List, Optional
@@ -10,7 +10,7 @@ import requests
 from blaser.__version__ import __title__, __version__
 
 # logger = logging.getLogger(__name__)
-logging.basicConfig(level=logging.DEBUG)
+# logging.basicConfig(level=logging.DEBUG)
 
 
 class BlaseballAPI:
@@ -39,17 +39,16 @@ class BlaseballAPI:
         """
         url = f"{self.base_url}/{request}"
         resp = self.sess.get(url, params=payload, headers=self.headers)
-        import ipdb
-
-        ipdb.set_trace()
         if resp.ok:
             return resp.json()
         else:
             resp.raise_for_status()
 
     # Live Data
-    def stream_data(self) -> dict:
-        """"""
+    def stream_data(self) -> List[dict]:
+        """
+        Returns:
+        """
         request = "database/"
         return self._get(request)
 
@@ -60,6 +59,7 @@ class BlaseballAPI:
 
         Args:
           league_id:
+        Returns:
         """
         request = "database/league"
         params = {"id": league_id}
@@ -71,14 +71,17 @@ class BlaseballAPI:
 
         Args:
           subleague_id:
+        Returns:
         """
-        request = "subleague"
+        request = "database/subleague"
         params = {"id": subleague_id}
         return self._get(request, payload=params)
 
     def get_division_info(self, division_id: str) -> dict:
         """
         Gets information for a division given its ID.
+
+        Returns:
         """
         request = "database/division"
         params = {"id": division_id}
@@ -90,6 +93,8 @@ class BlaseballAPI:
 
         Args:
           team_id:
+
+        Returns:
         """
         request = "database/team"
         params = {"id": team_id}
@@ -106,6 +111,8 @@ class BlaseballAPI:
           A dict
         """
         request = "database/players"
+        if isinstance(player_ids, list):
+            player_ids = ",".join(player_ids)
         params = {"ids": player_ids}
         return self._get(request, params)
 
@@ -118,6 +125,8 @@ class BlaseballAPI:
 
         Args:
           season_number:
+
+        Returns:
         """
         request = "database/season"
         params = {"number": season_number - 1}
@@ -134,6 +143,8 @@ class BlaseballAPI:
         Args:
           day:
           season:
+
+        Returns:
         """
         request = "database/games"
         params = {"day": day - 1, "season": season - 1}
@@ -149,6 +160,7 @@ class BlaseballAPI:
 
         Args:
           game_id:
+        Returns:
         """
         request = f"database/gameById/{game_id}"
         return self._get(request)
@@ -162,6 +174,7 @@ class BlaseballAPI:
 
         Args:
           season:
+        Returns:
         """
         request = "database/playoffs"
         params = {"number": season - 1}
@@ -181,8 +194,12 @@ class BlaseballAPI:
     def get_playoff_matchups(self, matchup_ids: List[str]) -> dict:
         """
         Gets information about one or more playoff matchups given their IDs.
+
+        Returns:
         """
         request = "database/playoffMatchups"
+        if isinstance(matchup_ids, list):
+            matchup_ids = ",".join(matchup_ids)
         params = {"ids": matchup_ids}
         return self._get(request, params)
 
@@ -196,7 +213,7 @@ class BlaseballAPI:
         request = "database/simulationData"
         return self._get(request)
 
-    def list_idol_leaderboard(self) -> List[dict]:
+    def list_idol_leaderboard(self) -> dict:
         """
         Lists the players on the Idol leaderboard.
 
@@ -206,48 +223,127 @@ class BlaseballAPI:
         request = "api/getIdols"
         return self._get(request)
 
-    def list_hall_of_flamers(self) -> List[dict]:
+    def list_hall_of_flame(self) -> dict:
         """
-        Lists players in the hall of fame along with their peanut count.
+        Lists players in the hall of flame along with their peanut count.
+
+        Returns:
         """
         request = "api/getTribute"
         return self._get(request)
 
     # Summaries
-    def list_all_divisions(self) -> List[dict]:
+    def list_all_divisions(self) -> dict:
         """
-        Lists each diision and its member teams.
+        Lists each division and its member teams.
+
+        Returns:
         """
         request = "database/allDivisions"
         return self._get(request)
 
     def list_all_teams(self):
-        pass
+        """
+        Lists all teams.
+
+        Returns:
+        """
+        request = "database/allTeams"
+        return self._get(request)
 
     def list_global_events(self):
-        pass
+        """
+        Lists the messages that make the content of the ticker at the top of the
+        window.
 
-    def get_standings(self):
-        pass
+        Returns:
+        """
+        request = "database/globalEvents"
+        return self._get(request)
 
-    def get_tiebreakers(self):
-        pass
+    def get_standings(self, standings_id: str) -> dict:
+        """
+        Gets information for the requested standings ID from a season object.
+
+        Args:
+          standings_id: A string specifying the ID of the standings object
+        Returns:
+        """
+        request = "database/standings"
+        params = {"id": standings_id}
+        return self._get(request, payload=params)
+
+    def get_tiebreakers(self, tiebreakers_id: str) -> dict:
+        """
+        Gets information for a tiebreaker.
+
+        Args:
+          tiebreakers_id: A string specifying the ID of the tiebreaker object
+        Returns:
+        """
+        request = "database/tiebreakers"
+        params = {"id": tiebreakers_id}
+        return self._get(request, payload=params)
 
     # Elections
-    def get_blessing_results(self):
-        pass
+    def get_blessing_results(self, blessing_ids: List[str]) -> List[dict]:
+        """
+        Gets the information about one or more blessings.
 
-    def get_decree_results(self):
-        pass
+        Args:
+          blessing_ids: A list of strings containing IDs of blessing objects
+        Returns:
+          A list of dicts containing information about the requested blessings.
+        """
+        request = "database/bonusResults"
+        if isinstance(blessing_ids, list):
+            blessing_ids = ",".join(blessing_ids)
+        params = {"ids": blessing_ids}
+        return self._get(request, payload=params)
 
-    def get_election_recap(self):
-        pass
+    def get_decree_results(self, decree_ids: List[str]) -> List[dict]:
+        """
+        Gets information about one or more decrees.
 
-    def get_election_details(self):
-        pass
+        Args:
+          decree_ids: A list of strings containing IDs of decree objects
+        Returns:
+          A list of dicts containing information about the requested decrees.
+        """
+        request = "database/decreeResults"
+        if isinstance(decree_ids, list):
+            decree_ids = ",".join(decree_ids)
+        params = {"ids": decree_ids}
+        return self._get(request, payload=params)
+
+    def get_election_recap(self, season: int) -> dict:
+        """
+        Gets information about the decrees and blessings passed for a given season.
+
+        The API zero-indexes the season, so this method performs that math for
+        user-friendliness.
+
+        Args:
+          season: An int specifying the season number
+        Returns:
+          A dict containing the election results for the requested season.
+        """
+        request = "database/offseasonRecap"
+        params = {"season": season - 1}
+        return self._get(request, payload=params)
+
+    def list_election_details(self) -> dict:
+        """
+        Lists the decrees and blessings for the end of the current season.
+
+        Returns:
+          A dict containing decrees and blessings for the current season.
+        """
+        request = "database/offseasonSetup"
+        return self._get(request)
 
     # Statsheets
-    def get_season_statsheets(self, seasons: List[str]) -> List[dict]:
+    def get_season_statsheets(self, seasons: List[str]) -> dict:
         """
         Gets statsheets for one or more seasons.
 
@@ -260,7 +356,7 @@ class BlaseballAPI:
         params = {"ids": seasons}
         return self._get(request, payload=params)
 
-    def get_game_statsheets(self, games: List[str]) -> List[dict]:
+    def get_game_statsheets(self, games: List[str]) -> dict:
         """
         Gets statsheets for one or more games.
 
@@ -273,7 +369,7 @@ class BlaseballAPI:
         params = {"ids": games}
         return self._get(request, payload=params)
 
-    def get_team_statsheets(self, teams: List[str]) -> List[dict]:
+    def get_team_statsheets(self, teams: List[str]) -> dict:
         """
         Gets statsheets for one or more teams.
 
@@ -289,7 +385,7 @@ class BlaseballAPI:
         params = {"ids": teams}
         return self._get(request, payload=params)
 
-    def get_player_statsheets(self, players: List[str]) -> List[dict]:
+    def get_player_statsheets(self, players: List[str]) -> dict:
         """
         Gets statsheets for one or more players.
 

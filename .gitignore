@@ -1,3 +1,7 @@
+# Test cache
+.tox/
+.pytest_cache/
+
 # Local configuration
 .env
 

@@ -8,6 +8,11 @@ black = "*"
 flake8-bugbear = "*"
 ipython = "*"
 ipdb = "*"
+pytest = "*"
+codecov = "*"
+pytest-cov = "*"
+pytest-mock = "*"
+tox = "*"
 
 [packages]
 requests = "*"
