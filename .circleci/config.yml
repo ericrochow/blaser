@@ -26,6 +26,7 @@ jobs:
     steps:
       - prep-environment
       - run-tests
+      - codecov
 
 workflows:
   commit:
