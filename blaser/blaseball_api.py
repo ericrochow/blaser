@@ -6,6 +6,7 @@
 from typing import List, Optional
 
 import requests
+from sseclient import SSEClient
 
 from blaser.__version__ import __title__, __version__
 
@@ -35,7 +36,10 @@ class BlaseballAPI:
         Performs an HTTP GET request.
 
         Args:
+          request: A string containing the URI of the requested API endpoint
+          payload: A dict containing the params to URL-encode into the URI (optional)
         Returns:
+          A dict containing the JSON output of the GET request.
         """
         url = f"{self.base_url}/{request}"
         resp = self.sess.get(url, params=payload, headers=self.headers)
@@ -44,13 +48,33 @@ class BlaseballAPI:
         else:
             resp.raise_for_status()
 
-    # Live Data
-    def stream_data(self) -> List[dict]:
+    def _sse(self, request: str, payload: Optional[dict] = None) -> dict:
         """
+        Subscribes to a Server Sent Event stream.
+
+        Args:
+          request: A string containing the URI of the requested API endpoint
+          payload: A dict containing the params to URL-encode into the URI (optional)
+        Yields:
+          Something once this actually starts working.
+        """
+        url = f"{self.base_url}/{request}"
+        messages = SSEClient(url)
+        for msg in messages:
+            yield msg.json()
+
+    # Live Data
+    def stream_data(self) -> dict:
+        """
+        Subscribes to the same datastream the API uses to power the www.blaseball.com
+        site using Server-sent Events.
+
+        Every few seconds a data event will be sent.
+
         Returns:
         """
-        request = "database/"
-        return self._get(request)
+        request = "database/streamData"
+        return self._sse(request)
 
     # Objects
     def get_league_info(self, league_id: str) -> dict:
