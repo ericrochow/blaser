@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "114862fd0f043feb72b49a31fba3389ed099863951607e3ee96f7017ad2782e8"
+            "sha256": "852c38804c836baec3403e927e5383d54982a8953fa321d6b2ebfe3fde5bb4be"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -77,6 +77,14 @@
                 "sha256:a841dacd6b99318a741b166adb07e19ee71a274450e68237b4650ca1055ab128"
             ],
             "version": "==1.4.4"
+        },
+        "astor": {
+            "hashes": [
+                "sha256:070a54e890cefb5b3739d19f30f5a5ec840ffc9c50ffa7d23cc9fc1a38ebbfc5",
+                "sha256:6a6effda93f4e1ce9f618779b2dd1d9d84f1e32812c23a29b3fff6fd7f63fa5e"
+            ],
+            "markers": "python_version >= '2.7' and python_version not in '3.0, 3.1, 3.2, 3.3'",
+            "version": "==0.8.1"
         },
         "attrs": {
             "hashes": [
@@ -200,6 +208,13 @@
             "markers": "python_version >= '2.7' and python_version not in '3.0, 3.1, 3.2, 3.3'",
             "version": "==3.8.4"
         },
+        "flake8-black": {
+            "hashes": [
+                "sha256:f26651bc10db786c03f4093414f7c9ea982ed8a244cec323c984feeffdf4c118"
+            ],
+            "index": "pypi",
+            "version": "==0.2.1"
+        },
         "flake8-bugbear": {
             "hashes": [
                 "sha256:a3ddc03ec28ba2296fc6f89444d1c946a6b76460f859795b35b77d4920a51b63",
@@ -207,6 +222,30 @@
             ],
             "index": "pypi",
             "version": "==20.1.4"
+        },
+        "flake8-if-statements": {
+            "hashes": [
+                "sha256:30bbf55b4206919820a7e1c3719034215d7256b7c2844cc77b9ef5a75f171214",
+                "sha256:88d57da0b9bfeee46e416169086b65e23171939f8d08a9773097423a43c683eb"
+            ],
+            "index": "pypi",
+            "version": "==0.1.0"
+        },
+        "flake8-plugin-utils": {
+            "hashes": [
+                "sha256:6e996bc24ebe327558f24efd106f1be5f0c033c8cbb6eed815631f73d487f1c9",
+                "sha256:efdbf9d15b18f72b7c348dd360f30e7cf3e73aa67ff832d5343eb5aa1115f250"
+            ],
+            "markers": "python_version >= '3.6' and python_version < '4.0'",
+            "version": "==1.3.1"
+        },
+        "flake8-raise": {
+            "hashes": [
+                "sha256:0a9890e16b851402d9b0d4fafe6c34890eab73835a2c2079c3850a25be575623",
+                "sha256:df26e5c542a58c8f8786d978e18ad7e54126a0ef5c6241c35dafaca7e2bbb808"
+            ],
+            "index": "pypi",
+            "version": "==0.0.5"
         },
         "idna": {
             "hashes": [
@@ -478,6 +517,7 @@
                 "sha256:6daac9731f172c2a22ade6ed0c00197ee7cc1221aa84cfdf9c31defeb059a907",
                 "sha256:715ff2f2df46121071622063fc7543d9b1fd19ebfc4f5c8895af64a77a8c852c",
                 "sha256:73d785a950fc82dd2a25897d525d003f6378d1cb23ab305578394694202a58c3",
+                "sha256:7e4c9d7658aaa1fc80018593abdf8598bf91325af6af5cce4ce7c73bc45ea53d",
                 "sha256:8c8aaad94455178e3187ab22c8b01a3837f8ee50e09cf31f1ba129eb293ec30b",
                 "sha256:8ce678dbaf790dbdb3eba24056d5364fb45944f33553dd5869b7580cdbb83614",
                 "sha256:92c325624e304ebf0e025d1224b77dd4e6393f18aab8d829b5b7e04afe9b7a2c",
@@ -489,8 +529,10 @@
                 "sha256:d43943ef777f9a1c42bf4e552ba23ac77a6351de620aa9acf64ad54933ad4d34",
                 "sha256:d5d33e9e7af3b34a40dc05f498939f0ebf187f07c385fd58d591c533ad8562fe",
                 "sha256:d648b8e3bf2fe648745c8ffcee3db3ff903d0817a01a12dd6a6ea7a8f4889072",
+                "sha256:f208eb7aff048f6bea9586e61af041ddf7f9ade7caed625742af423f6bae3298",
                 "sha256:fac11badff8313e23717f3dada86a15389d0708275bddf766cca67a84ead3e91",
                 "sha256:fc0fea399acb12edbf8a628ba8d2312f583bdbdb3335635db062fa98cf71fca4",
+                "sha256:fcf135e17cc74dbfbc05894ebca928ffeb23d9790b3167a674921db19082401f",
                 "sha256:fe460b922ec15dd205595c9b5b99e2f056fd98ae8f9f56b888e7a17dc2b757e7"
             ],
             "version": "==1.4.1"
