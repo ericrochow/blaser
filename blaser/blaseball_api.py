@@ -1,25 +1,29 @@
 #!/usr/bin/env python3
-
+"""
+"""
 # import logging
 
-# from typing import Dict, List, Optional
-from typing import List, Optional
+from typing import Generator, List, Optional
 
 import requests
 from sseclient import SSEClient
 
 from blaser.__version__ import __title__, __version__
 
-# logger = logging.getLogger(__name__)
-# logging.basicConfig(level=logging.DEBUG)
-
 
 class BlaseballAPI:
-    """
-    Class to interact with the internal API for IBL blaseball.
-    """
+    """Class to interact with the internal API for IBL blaseball."""
 
-    def __init__(self):
+    def __init__(self) -> None:
+        """
+        Interacts with the internal Blaseball API.
+
+        Attributes:
+          user_agent:
+          headers:
+          base_url:
+          sess: A requests Session() object
+        """
         self.user_agent = f"{__title__}/{__version__}"
         self.headers = {
             "Accept": "application/json",
@@ -28,7 +32,8 @@ class BlaseballAPI:
         self.base_url = "https://www.blaseball.com"
         self.sess = requests.Session()
 
-    def __repr__(self):
+    def __repr__(self) -> str:
+        """REPR returns the name of the class."""
         return f"{self.__class__.__name__}"
 
     def _get(self, request: str, payload: Optional[dict] = None) -> dict:
@@ -48,7 +53,9 @@ class BlaseballAPI:
         else:
             resp.raise_for_status()
 
-    def _sse(self, request: str, payload: Optional[dict] = None) -> dict:
+    def _sse(
+        self, request: str, payload: Optional[dict] = None
+    ) -> Generator[dict, None, None]:
         """
         Subscribes to a Server Sent Event stream.
 
@@ -67,7 +74,7 @@ class BlaseballAPI:
     def stream_data(self) -> dict:
         """
         Subscribes to the same datastream the API uses to power the www.blaseball.com
-        site using Server-sent Events.
+            site using Server-sent Events.
 
         Every few seconds a data event will be sent.
 
@@ -406,6 +413,8 @@ class BlaseballAPI:
           A list of dicts containing the requested teams' statsheets.
         """
         request = "database/teamStatSheets"
+        if isinstance(teams, list):
+            teams = ",".join(teams)
         params = {"ids": teams}
         return self._get(request, payload=params)
 
@@ -427,17 +436,79 @@ class BlaseballAPI:
 
 
 class BlaseballReferenceAPI:
-    def __init__(self):
+
+    VALID_CATEGORIES = ["batting", "pitching", "fielding", "running"]
+    VALID_STATS = {
+        "batting": [
+            "batting_average",
+            "on_base_percentage",
+            "slugging",
+            "plate_appearances",
+            "at_bats",
+            "hits",
+            "walks",
+            "singles",
+            "doubles",
+            "triples",
+            "home_runs",
+            "runs_batted_in",
+            "strikeouts",
+            "sacrifices",
+            "at_bats_risp",
+            "hits_risps",
+            "batting_average_risp",
+            "on_base_slugging",
+            "total_bases",
+            "hbps",
+            "ground_outs",
+            "flyouts",
+            "gidps",
+        ],
+        "pitching": [
+            "games",
+            "pitch_count",
+            "outs_recorded",
+            "innings",
+            "runs_allowed",
+            "era",
+            "strikeouts",
+            "k_per_9",
+            "walks",
+            "hrs_allowed",
+            "hits_allowed",
+        ],
+        "fielding": ["plays"],
+        "running": ["stolen_bases", "caught_stealing", "runs"],
+    }
+
+    def __init__(self) -> None:
         self.base_url = "https://api.blaseball-reference.com/v1"
         self.sess = requests.Session()
 
-    def _get(self, request: str, payload: Optional[dict] = None):
+    def __repr__(self) -> str:
+        """"""
+        return f"{self.__class__.__name__}"
+
+    def _get(self, request: str, payload: Optional[dict] = None) -> dict:
         url = f"{self.base_url}/{request}"
         resp = self.sess.get(url, params=payload)
         if resp.ok:
             return resp.json()
         else:
             resp.raise_for_status()
+
+    # Raw Data
+    def get_raw_data(self, season: int) -> dict:
+        """
+
+        Args:
+          season:
+        Returns:
+          A dict
+        """
+        method = "/data/events"
+        params = {"season": season - 1}
+        return self._get(method, payload=params)
 
     # Game Events
     def get_game_events(self) -> dict:
@@ -495,7 +566,7 @@ class BlaseballReferenceAPI:
 
     def get_player_info(self) -> dict:
         """
-        Gets extended info for a given player: name, attributes, ratings, and stars
+        Gets extended info for a given player: name, attributes, ratings, and stars.
 
         Args:
         Returns
@@ -526,8 +597,10 @@ class BlaseballReferenceAPI:
 
     def list_all_players_for_gameday(self, season: int, day: int) -> dict:
         """
-        Lists all players for a given season and gameday. The internal API objects are
-            zero-indexed, so the method performs the math for user-friendlyness.
+        Lists all players for a given season and gameday.
+
+        The internal API objects are zero-indexed, so the method performs the math for
+            user-friendlyness.
 
         Args:
           season:
@@ -539,16 +612,27 @@ class BlaseballReferenceAPI:
         return self._get(method, payload=params)
 
     # Teams
-    def get_current_roster(self) -> dict:
+    def get_current_roster(self, team_id: str = None, slug: str = None) -> dict:
         """
         Args:
         Returns:
+        Raises:
+          ValueError: Neither team_id nor slug were set.
         """
         method = "currentRoster"
-        return self._get(method)
+        if not (team_id or slug):
+            raise ValueError("Either team_id or slug must be set.")
+        params = {}
+        if team_id:
+            params["teamId"] = team_id
+        if slug:
+            params["slug"] = slug
+        return self._get(method, payload=params)
 
     def list_all_teams(self) -> dict:
         """
+        List all teams.
+
         Args:
         Returns:
         """
@@ -564,18 +648,55 @@ class BlaseballReferenceAPI:
         return self._get(method)
 
     # Statistics
-    def get_season_leaders(self) -> dict:
+    def get_season_leaders(
+        self,
+        season: int,
+        category: str,
+        stat: str,
+        order: str = "DESC",
+        limit: int = 10,
+    ) -> dict:
         """
+        Gets the season leaders for a given category and stat.
+
         Args:
+          season:
+          category:
+          stat:
+          order:
+          limit:
         Returns:
         """
+        valid_orders = ["ASC", "DESC"]
         method = "seasonLeaders"
-        return self._get(method)
+        if category.lower() not in self.VALID_CATEGORIES:
+            raise ValueError(f"'category' must be one of {self.VALID_CATEGORIES}.")
+        if stat.lower() not in self.VALID_STATS[category]:
+            raise ValueError(f"'stat' must be one of {self.VALID_STATS[category]}.")
+        if order.upper() not in valid_orders:
+            raise ValueError(f"'order' must be one of {valid_orders}.")
+        params = {
+            "season": season - 1,
+            "category": category.lower(),
+            "stat": stat,
+            "order": order.upper(),
+            "limit": limit,
+        }
+        return self._get(method, payload=params)
 
-    def get_player_stats(self) -> dict:
+    def get_player_stats(
+        self, category: str, player_ids: list, season: int = None
+    ) -> dict:
         """
         Args:
         Returns:
         """
         method = "playerStats"
-        return self._get(method)
+        if category.lower() not in self.VALID_CATEGORIES:
+            raise ValueError(f"'category' must be one of {self.VALID_CATEGORIES}")
+        if isinstance(player_ids, list):
+            player_ids = ",".join(player_ids)
+        params = {"category": category, "playerIds": player_ids}
+        if season:
+            params["season"] = season - 1
+        return self._get(method, payload=params)
