@@ -15,7 +15,7 @@ with open("README.md", mode="r", encoding="utf-8") as f:
 # with open("HISTORY.md", mode="r", encoding="utf-8") as f:
 # history = f.read()
 
-requirements = ["requests"]
+requirements = ["requests", "sseclient"]
 test_requires = ["codecov", "pytest-cov", "pytest-mock", "pytest"]
 
 
@@ -37,11 +37,11 @@ class PyTest(TestCommand):
         try:
             from multiprocessing import cpu_count
 
-            self.pytest_args = ["-n", str(cpu_count()), "--boxed", "--cov=./"]
+            self.pytest_args = ["-n", str(cpu_count()), "--boxed", "--cov=./blaser"]
         except (ImportError, NotImplementedError):
-            self.pytest_args = ["-n", "1", "--boxed", "--cov=./"]
+            self.pytest_args = ["-n", "1", "--boxed", "--cov=./blaser"]
         else:
-            self.pytest_args = ["--cov=./"]
+            self.pytest_args = ["--cov=./blaser"]
 
     def finalize_options(self):
         TestCommand.finalize_options(self)
