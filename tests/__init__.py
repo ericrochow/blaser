@@ -1,9 +1,10 @@
 #!/usr/bin/env python3
 
-from blaser.blaseball_api import BlaseballAPI
+from blaser.blaseball_api import BlaseballAPI, BlaseballReferenceAPI
 
 
 BBAPI = BlaseballAPI()
+BBRAPI = BlaseballReferenceAPI()
 BLESSING_IDS = [
     "7ce7eeb6-6abb-461c-b506-c10983e708a4",
     "df254f3d-3690-4417-bd6f-be2a231a7c25",
