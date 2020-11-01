@@ -11,12 +11,14 @@ from . import (
     DECREE_IDS,
     DIVISION_ID,
     GAME_ID,
+    GAME_STATSHEET_IDS,
     LEAGUE_ID,
     PLAYER_IDS,
     PLAYOFF_MATCHUP_IDS,
     PLAYOFF_ROUND_ID,
     SEASON,
     STANDINGS_ID,
+    SEASON_STATSHEET_IDS,
     SUBLEAGUE_ID,
     TEAM_ID,
     TIEBREAKER_ID,
@@ -30,6 +32,11 @@ def test_repr():
 def test__get_invalid_request():
     with pytest.raises(JSONDecodeError):
         BBAPI._get("pleebis")
+
+
+def test__sse():
+    r = BBAPI._sse("database/streamData")
+    assert isinstance(r, types.GeneratorType)
 
 
 def test_stream_data_type():
@@ -172,3 +179,33 @@ def test_get_election_recap_type():
 def test_list_election_details_type():
     r = BBAPI.list_election_details()
     assert isinstance(r, dict)
+
+
+def test_get_season_statsheets_type():
+    r = BBAPI.get_season_statsheets(SEASON_STATSHEET_IDS)
+    assert isinstance(r, list)
+
+
+def test_get_game_statsheets_type():
+    r = BBAPI.get_game_statsheets(GAME_STATSHEET_IDS)
+    assert isinstance(r, list)
+
+
+def test_get_team_statsheets_type_single():
+    r = BBAPI.get_team_statsheets(TEAM_ID)
+    assert isinstance(r, list)
+
+
+def test_get_team_statsheets_type_multi():
+    r = BBAPI.get_team_statsheets(TEAM_ID)
+    assert isinstance(r, list)
+
+
+def test_get_player_statsheets_type_single():
+    r = BBAPI.get_player_statsheets(PLAYER_IDS[0])
+    assert isinstance(r, list)
+
+
+def test_get_player_statsheets_type_multi():
+    r = BBAPI.get_player_statsheets(PLAYER_IDS)
+    assert isinstance(r, list)

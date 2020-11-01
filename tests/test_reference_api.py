@@ -37,6 +37,58 @@ def test_get_raw_data_type():
     assert isinstance(r, dict)
 
 
+def test_get_game_events_type():
+    r = BBRAPI.get_game_events()
+    assert isinstance(r, dict)
+
+
+def test_count_by_type():
+    r = BBRAPI.count_by_type("UNKNOWN", "batter", PLAYER_IDS[0])
+    assert isinstance(r, dict)
+
+
+def test_count_by_type_invalid_input():
+    with pytest.raises(ValueError):
+        BBRAPI.count_by_type("UNKNOWN", "pleebis", PLAYER_IDS[0])
+
+
+def test_list_deceased_players_type():
+    r = BBRAPI.list_deceased_players()
+    assert isinstance(r, list)
+
+
+def test_list_player_ids_by_name_type():
+    r = BBRAPI.list_player_ids_by_name("Goobie Ballson")
+    assert isinstance(r, list)
+
+
+def test_get_player_info_type():
+    r = BBRAPI.get_player_info(player_id=PLAYER_IDS[0])
+    assert isinstance(r, list)
+
+
+def test_get_player_info_player_id():
+    r = BBRAPI.get_player_info(player_id=PLAYER_IDS[0])
+    print(r)
+    assert r[0].get("player_id", None)
+
+
+def test_get_player_info_player_name():
+    r = BBRAPI.get_player_info(name="Goobie Ballson")
+    print(r)
+    assert r[0].get("player_id", None)
+
+
+def test_get_player_info_player_slug():
+    r = BBRAPI.get_player_info(slug="goobie-ballson")
+    assert r[0].get("player_id", None)
+
+
+def test_get_player_info_no_args():
+    with pytest.raises(ValueError):
+        BBRAPI.get_player_info()
+
+
 ####
 
 

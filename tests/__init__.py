@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
-from blaser.blaseball_api import BlaseballAPI, BlaseballReferenceAPI
+from blaser.blaseball_api import BlaseballAPI
+from blaser.blaseball_reference_api import BlaseballReferenceAPI
 
 
 BBAPI = BlaseballAPI()
@@ -17,6 +18,10 @@ DECREE_IDS = [
 ]
 DIVISION_ID = "f711d960-dc28-4ae2-9249-e1f320fec7d7"
 GAME_ID = "dc767612-eb77-417b-8d2f-c21eb4dab868"
+GAME_STATSHEET_IDS = [
+    "b4ede296-d6b3-48ce-b67d-47c1b4f27960",
+    "14b6ebeb-42d8-4fb0-b165-36141b2c9cab",
+]
 LEAGUE_ID = "d8545021-e9fc-48a3-af74-48685950a183"
 PLAYER_IDS = [
     "c0732e36-3731-4f1a-abdc-daa9563b6506",
@@ -30,7 +35,12 @@ PLAYOFF_MATCHUP_IDS = [
 ]
 PLAYOFF_ROUND_ID = "aecb79df-5f61-40c1-a244-8a42268f2e4c"
 SEASON = 8
+SEASON_STATSHEET_IDS = ["64392ad5-e14c-42c0-825c-c85da29addaa"]
 STANDINGS_ID = "48789741-69b1-4aa9-a46c-eda3351a3f5e"
 SUBLEAGUE_ID = "7d3a3dd6-9ea1-4535-9d91-bde875c85e80"
 TEAM_ID = "23e4cbc1-e9cd-47fa-a35b-bfa06f726cb7"
+TEAM_STATSHEET_IDS = [
+    "9298cca4-442e-4aa0-8bcf-8ee349b1a45e",
+    "cc0fb608-945e-4b3f-8848-0c73dc6d32dc",
+]
 TIEBREAKER_ID = "72a618ed-c61c-4162-a455-3959a2d0e738"
